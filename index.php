@@ -3,69 +3,68 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // index.php
-// Detta är en Frontcontroller. Alla sidbyten sker via denna sida.
-// Inparametern ?p= anger vilken sida som ska visas.
-// T ex www.template.se/?p=main
-// Det enda du har anledning att ändra på denna sida är listan längst ner.
+// This is the front controller for 'Min bok'. All pages is entered via this code.
+// The in parameter ?p= followed by an index gives what page to show. E g www.template.se/?p=main .
 //
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Filer och parametrar som är gemensamma för alla sidor på siten.
-//
+// Files and parameters that are common for all pages on the site.
+
 session_start();
 require_once('config.php');
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Uppdatera besöksräknaren om det är en ny gäst.
-//
-/*
-$hitCounter = implode("",file("counter.txt")); //Hämta räknarvärdet ur filen counter.txt.
-if(!isset($_SESSION["hitCounter"])) { //Om det är den första sidan i en ny session.
-    $hitCounter++; //Öka med 1.
-    $fh = fopen('counter.txt', 'w');
-    fwrite($fh, $hitCounter); //Skriv in det nya värdet i counter.txt.
-    fclose($fh);
+// If hit counter is chosen in config then update the visitors counter if it is a new guest.
+
+if (WS_HITCOUNTER) {
+    $hitCounter = implode("",file("counter.txt")); //Get the counter value from the fila counter.txt.
+    if(!isset($_SESSION["hitCounter"])) { //If it is the first page in a new session.
+        $hitCounter++; 
+        $fh = fopen('counter.txt', 'w');
+        fwrite($fh, $hitCounter); //Write the new value in counter.txt.
+        fclose($fh);
+    }
+    $_SESSION["hitCounter"] = str_pad($hitCounter, 5, "0", STR_PAD_LEFT);
 }
-$_SESSION["hitCounter"] = str_pad($hitCounter, 5, "0", STR_PAD_LEFT);
-*/
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Felhantering på eller av. Styrs av config.php
-//
+// Debug handling on or off. Set in config.php
+
 $debug = "";
 $debugEnable = WS_DEBUG;
 if ($debugEnable) error_reporting(E_ALL | E_STRICT);
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Startar en timer som kan visa hur lång tid det tog att få upp sidan. Styrs av config.php
-//
+// Start a timer to show how long it takes to open the page. Set in config.php
+
 if(WS_TIMER) {
 	$gTimerStart = microtime(TRUE);
 }
  
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Möjliggör autoload för alla klassfiler.
-//
+// Enable autoload for all class files.
+
 function __autoload($class_name) {
     require_once(TP_SOURCEPATH . $class_name . '.php');
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Input till sidan är 'p'.
-//
+// Input to the page is 'p'.
+
 $nextPage = isset($_GET['p']) ? $_GET['p'] : 'main';
-if (WS_WORK) $nextPage = 'work';
+if (WS_WORK) $nextPage = 'work'; //Rerout to work sign when the site is closed. Set in config.php.
 if ($debugEnable) $debug .= "nextPage = " . $nextPage . "<br /> \n";
 
 
-// Visa den efterfrågade sidan.
+// Show the requested page.
 switch($nextPage) {	
 
-    // Allmäna sidor
+    // Common pages
     case 'main':        require_once(TP_PAGESPATH . 'PMain.php');               break;
     case 'my_page':     require_once(TP_PAGESPATH . 'PMyPage.php');             break;
     case 'edit_child':  require_once(TP_PAGESPATH . 'PEditChild.php');          break;
@@ -74,9 +73,7 @@ switch($nextPage) {
     case 'save_book':   require_once(TP_PAGESPATH . 'PSaveBook.php');           break;
     case 'show_page':   require_once(TP_PAGESPATH . 'PShowPage.php');           break;
 
-
-    
-    // Administratörsidor
+    // Administrator pages
     case 'admin':       require_once(TP_PAGESPATH . 'admin/PAdmin.php');        break;
     case 'list_user':   require_once(TP_PAGESPATH . 'admin/PListUser.php');     break;
     case 'search_user': require_once(TP_PAGESPATH . 'admin/PSearchUser.php');   break;
@@ -90,12 +87,12 @@ switch($nextPage) {
     case 'save_account':require_once(TP_PAGESPATH . 'admin/PSaveAccount.php');  break;
     case 'del_account': require_once(TP_PAGESPATH . 'admin/PDelAccount.php');   break;
 
-    // Installera databasen
+    // Install the databasen
     case 'dump_db':     require_once(TP_PAGESPATH . 'admin/PDumpDB.php');       break;
     case 'install_db':  require_once(TP_PAGESPATH . 'admin/PInstallDb.php');    break;
     case 'fill_db':     require_once(TP_PAGESPATH . 'admin/PFillDb.php');       break;
    
-    // Loginhantering
+    // Login handling
     case 'login_ex':    require_once(TP_PAGESPATH . 'login/PLoginEx.php');      break;
     case 'logout':      require_once(TP_PAGESPATH . 'login/PLogout.php');       break;
 

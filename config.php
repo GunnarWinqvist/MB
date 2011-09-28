@@ -3,15 +3,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // config.php
-// Konfigurationsfil med parametrar som g�ller f�r hela denna website.
-// Anropas varje g�ng man passerar index.php.
+// Configurations file with parameters for the website.
+// Is called every time index is opened.
 //
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Databasparametrar
-// F�s fr�n webplatsleverant�ren.
-//
+// Database parameters.
 
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'Gunnar');
@@ -22,34 +21,33 @@ define('DB_PREFIX', 	'min_bok_'); //Prefix f�r att kunna anv�nda flera datab
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Website-gemensamma parametrar.
-//
-define('WS_SITELINK',       'http://localhost/');         // Adressen till webplatsens huvudsida.
-define('WS_TITLE', 			'Template');            // Namn p� webplatsen.
-define('WS_STYLESHEET', 	'style/stylesheetPlain.css'); // Vilket stylesheet vill du anv�nda.	
-define('WS_FAVICON', 	    'images/favicon.ico');        // Pekar p� flikiconen.
-define('WS_FOOTER', 		"Dispangul�r har gjort den h�r web-platsen.");
-define('WS_CHARSET', 	    'windows-1252');              // Ange charset. windows-1252=svenska tecken
-define('WS_LANGUAGE',       'se');                         // Defaultspr�k svenska.
+// Website parameters.
 
-define('WS_DEBUG',          TRUE);                      // Visa debug-information    
-define('WS_VALIDATORS',     FALSE);	                    // Visa l�nkar till w3c validators tools.
-define('WS_TIMER', 		    FALSE);                      // Visa timer f�r sidgenerering.
-define('WS_WORK', 		    FALSE);                      // Arbete med siten p�g�r.
+define('WS_SITELINK',       'http://localhost/');
+define('WS_TITLE', 			'Min bok');
+define('WS_STYLESHEET', 	'style/stylesheetPlain.css');
+define('WS_FAVICON', 	    'images/favicon.ico');
+define('WS_FOOTER', 		"Dispangulär har gjort den här web-platsen.");
+define('WS_CHARSET', 	    'windows-1252');
+define('WS_LANGUAGE',       'se');
 
-define('TP_ROOTPATH', 	    dirname(__FILE__) . '/');        // Klasser, funktioner, kod
-define('TP_SOURCEPATH', 	dirname(__FILE__) . '/src/');    // Klasser, funktioner, kod
-define('TP_PAGESPATH', 	    dirname(__FILE__) . '/pages/');  // Pagecontrollers och moduler
-define('TP_IMAGESPATH',     dirname(__FILE__) . '/images/'); // Bilder och grafik.
-define('TP_DOCUMENTSPATH',  dirname(__FILE__) . '/documents/'); // Dokument.
-//define('TP_PEARPATH',       dirname(__FILE__) . '/src/pear/PEAR/'); // Om PEAR-biblioteket �r lokalt installerat.
-define('TP_PEARPATH',       FALSE); // Om PEAR-biblioteket �r centralt installerat.
+define('WS_DEBUG',          TRUE);
+define('WS_VALIDATORS',     FALSE);
+define('WS_TIMER', 		    FALSE);
+define('WS_WORK', 		    FALSE);
+define('WS_HITCOUNTER',     FALSE);
+
+define('TP_ROOTPATH', 	    dirname(__FILE__) . '/');
+define('TP_SOURCEPATH', 	dirname(__FILE__) . '/src/');
+define('TP_PAGESPATH', 	    dirname(__FILE__) . '/pages/');
+define('TP_IMAGESPATH',     dirname(__FILE__) . '/images/');
+define('TP_DOCUMENTSPATH',  dirname(__FILE__) . '/documents/');
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Meny-inneh�ll i array.
-// �ndringar m�ste g�ras i index.php samtidigt.
-//
+// Menu in array.
+// Changes must be done in index.php at the same time.
+
 $menuElements = Array (
     'Framsidan'     => 'main',
     'Min sida'       => 'my_page',
@@ -57,7 +55,7 @@ $menuElements = Array (
     'Rubrik 3'         => 'main',
     'Rubrik 4'       => 'main',
 );
-define('WS_MENU', serialize($menuElements)); // G�r om menyelementen till en global konstant.
+define('WS_MENU', serialize($menuElements));
 
 
 ?>
