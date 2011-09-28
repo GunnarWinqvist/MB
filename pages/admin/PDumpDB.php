@@ -4,14 +4,18 @@
 //
 // PDumpDB.php
 // Called by 'dump_db' from index.php.
-// This page dumps the database on a file. 
-// Input: 
-// Output: 
-// 
+// This page dumps the database on a file named $fileName for back up purposes.
+$fileName   = "DB_dump.txt";
+// The values are separated with $delimiter. 
+$delimiter      = "¤";
+// If $delimiter exists in the text it is substituted with $substitution.
+$substitution   = "*";
+// Each header starts with $headerSignature.
+$headerSignature = "-*-";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -21,7 +25,7 @@ $intFilter->UserIsAuthorisedOrDie('adm');
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Prepare the database
-//
+
 $dbAccess       = new CdbAccess();
 $tableUser      = DB_PREFIX . 'User';
 $tableChild     = DB_PREFIX . 'Child';
@@ -29,25 +33,40 @@ $tableBook      = DB_PREFIX . 'Book';
 $tablePage      = DB_PREFIX . 'Page';
 $tableField     = DB_PREFIX . 'Field';
 $tableRelation  = DB_PREFIX . 'Relation';
-$delimiter      = "¤";
-$substitution   = "*";
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // Open the file.
-$dumpFileName = TP_DOCUMENTSPATH . "DB_dump.txt";
-$fh = fopen($dumpFileName, "w");
+
+$filePath = TP_DOCUMENTSPATH . $fileName;
+$fh = fopen($filePath, "w");
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Prepare an array of headers and querys.
 
 $querys = array( 
-    array( "\r\n-*-tableUser\r\n",     "SELECT * FROM {$tableUser};"),
-    array( "\r\n-*-tableChild\r\n",     "SELECT * FROM {$tableChild};"),
-    array( "\r\n-*-tableBook\r\n", "SELECT * FROM {$tableBook};"),
-    array( "\r\n-*-tablePage\r\n",    "SELECT * FROM {$tablePage};"),
-    array( "\r\n-*-tableField\r\n",       "SELECT * FROM {$tableField};"),
-    array( "\r\n-*-tableRelation\r\n",   "SELECT * FROM {$tableRelation};")
+    array( "\r\n".$headerSignature."tableUser\r\n",      "SELECT * FROM {$tableUser};"),
+    array( "\r\n".$headerSignature."tableChild\r\n",     "SELECT * FROM {$tableChild};"),
+    array( "\r\n".$headerSignature."tableBook\r\n",      "SELECT * FROM {$tableBook};"),
+    array( "\r\n".$headerSignature."tablePage\r\n",      "SELECT * FROM {$tablePage};"),
+    array( "\r\n".$headerSignature."tableField\r\n",     "SELECT * FROM {$tableField};"),
+    array( "\r\n".$headerSignature."tableRelation\r\n",  "SELECT * FROM {$tableRelation};")
     );
-    
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Query everything from each table and write it to the file with the right header.
+
 foreach ($querys as $set) {
+
+    // Do this once for every table.
     list($header, $query) = $set;
-    fwrite($fh, $header); // Write the header.
+    
+    // Write the header.
+    fwrite($fh, $header);
+    
+    // Query and if it gives a result write every row to the file.
     if ($result = $dbAccess->SingleQuery($query)) {
         while($row = $result->fetch_row()) {
             if ($debugEnable) $debug .= "Query result: ".print_r($row, TRUE)."<br /> \n";
@@ -61,24 +80,23 @@ foreach ($querys as $set) {
     }
 }
 
+// Close the file.
 fclose($fh);
 
-$documents = WS_SITELINK . "documents/DB_dump.txt";
-$mainTextHTML = <<<HTMLCode
-<p>Gjorde en lyckad dump av databasen till filen: {$dumpFileName}.
-<p>Vill du ladda ner filen?</p>
-<a title='Hämta dumpfil' href='{$documents}' ><img src='../images/b_enter.gif' alt='Hämta dumpfil' /></a>
-
-HTMLCode;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Bygg upp sidan
-//
-$page = new CHTMLPage(); 
-$pageTitle = "Dumpa databasen";
+// Build the page.
 
-require(TP_PAGESPATH.'rightColumn.php'); 
+$pageTitle = "Dumpa databasen";
+$documents = WS_SITELINK . "documents/" . $fileName;
+$mainTextHTML = <<<HTMLCode
+<p>Gjorde en lyckad dump av databasen till filen: {$fileName}.
+<p>Vill du ladda ner filen?</p>
+<a title='Hämta dumpfil' href='{$documents}' ><img src='../images/b_enter.gif' alt='Hämta dumpfil' /></a>
+HTMLCode;
+
+$page = new CHTMLPage(); 
+require(TP_PAGESPATH.'rightColumn.php'); // Adds the right column.
 $page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
 
 ?>

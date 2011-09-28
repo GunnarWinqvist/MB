@@ -4,15 +4,17 @@
 //
 // FillDb.php
 // Called by 'fill_db' from index.php.
-// Fills the database with information from the file DB_dump.txt.
-// 
-// Input: 
-// Output: 
-//
+// Fills the database with information from the file $fileName.
+$fileName   = "DB_dump.txt";
+// The values must be separated with $delimiter. 
+$delimiter      = "¤";
+// Each header starts with $headerSignature
+$headerSignature = "-*-";
+// and the table must end with an empty line.
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -30,22 +32,30 @@ $tableBook      = DB_PREFIX . 'Book';
 $tablePage      = DB_PREFIX . 'Page';
 $tableField     = DB_PREFIX . 'Field';
 $tableRelation  = DB_PREFIX . 'Relation';
-$delimiter      = "¤";
 
-// Open the file. 
-$dumpFileName = TP_DOCUMENTSPATH . "DB_dump.txt";
-$fh = fopen($dumpFileName, "rt");
-if ($debugEnable) $debug .= "dumpFileName = ".$dumpFileName." fh=".$fh."<br /> \n";
-$mainTextHTML = "<p>Databasen har från filen ".$dumpFileName." fyllts med följande information:<p><br /> \n";
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Open the file.
+
+$filePath = TP_DOCUMENTSPATH . $fileName;
+$fh = fopen($filePath, "rt");
+if ($debugEnable) $debug .= "filePath = ".$filePath." fh=".$fh."<br /> \n";
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Search the file for information and add it to the database and to the shown page.
+
+// Init mainTextHTML. Information will be added while the database is filled.
+$mainTextHTML = "<p>Databasen har från filen ".$filePath." fyllts med följande information:<p><br /> \n";
 
 do {
-    // Find a header. Starts with '-*-'.
+    // Find a header. Starts with $headerSignature.
     $header = "";
     do {
         $row = fgets($fh);
         if ($debugEnable) $debug .= "row = ".$row."<br /> \n";
-        if (preg_match("/-*-/", $row)) $header = trim(trim($row, "-*"));
-    } while( !feof($fh) && !$header );
+        if (preg_match("/".$headerSignature."/", $row)) $header = trim(trim($row, $headerSignature));
+    } while( !feof($fh) && !$header ); // Continue untill a header is found or end of file.
     if ($debugEnable) $debug .= "header = ".$header."<br /> \n";
 
     //Write row by row to the DB untill an empty row or an eof.
@@ -96,6 +106,7 @@ VALUES ('{$row[0]}', '{$row[1]}');
 Query;
             break;
         }
+        // Make the query.
         $dbAccess->SingleQuery($query);
         $i++;
     }
@@ -103,17 +114,16 @@ Query;
 
 } while (!feof($fh));
 
-//Stäng filen
+// Close the file.
 fclose($fh);
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Bygg upp sidan
-//
-$page = new CHTMLPage(); 
+// Build the page.
+
 $pageTitle = "Fyll databasen";
 
+$page = new CHTMLPage(); 
 require(TP_PAGESPATH.'rightColumn.php'); 
 $page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
 
