@@ -18,7 +18,7 @@ $intFilter->FrontControllerIsVisitedOrDie();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kill old sessions
-$hitCounter = $_SESSION["hitCounter"]; //Spara hitCounter innan vi dödar sessionen.
+if (WS_HITCOUNTER) $hitCounter = $_SESSION["hitCounter"]; //Spara hitCounter innan vi dödar sessionen.
 require_once(TP_SOURCEPATH . 'FDestroySession.php');
 
 
@@ -56,7 +56,7 @@ Query;
 
 session_start(); // Restart the session after closing abowe.
 session_regenerate_id();
-$_SESSION["hitCounter"] = $hitCounter; // Set hitCounter again so a login doesn't count as a new visitor.
+if (WS_HITCOUNTER) $_SESSION["hitCounter"] = $hitCounter; // Set hitCounter again so a login doesn't count as a new visitor.
 
 if ($result=$dbAccess->SingleQuery($query)) {
     $row = $result->fetch_object();

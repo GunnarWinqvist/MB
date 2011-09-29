@@ -72,6 +72,9 @@ switch($nextPage) {
     case 'edit_book':   require_once(TP_PAGESPATH . 'PEditBook.php');           break;
     case 'save_book':   require_once(TP_PAGESPATH . 'PSaveBook.php');           break;
     case 'show_page':   require_once(TP_PAGESPATH . 'PShowPage.php');           break;
+    case 'create':      require_once(TP_PAGESPATH . 'PCreateAccount.php');      break;
+    case 'save_new':    require_once(TP_PAGESPATH . 'PSaveNewAccount.php');     break;
+    
 
     // Administrator pages
     case 'admin':       require_once(TP_PAGESPATH . 'admin/PAdmin.php');        break;

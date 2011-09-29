@@ -44,18 +44,4 @@ define('TP_IMAGESPATH',     dirname(__FILE__) . '/images/');
 define('TP_DOCUMENTSPATH',  dirname(__FILE__) . '/documents/');
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Menu in array.
-// Changes must be done in index.php at the same time.
-
-$menuElements = Array (
-    'Framsidan'     => 'main',
-    'Min sida'       => 'my_page',
-    'Rubrik 2'        => 'main',
-    'Rubrik 3'         => 'main',
-    'Rubrik 4'       => 'main',
-);
-define('WS_MENU', serialize($menuElements));
-
-
 ?>

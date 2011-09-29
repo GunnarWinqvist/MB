@@ -185,8 +185,7 @@ $mainTextHTML = <<<HTMLCode
 HTMLCode;
 
 $page = new CHTMLPage(); 
-require(TP_PAGESPATH.'rightColumn.php'); // Add the right column in $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 

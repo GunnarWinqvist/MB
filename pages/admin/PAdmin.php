@@ -46,8 +46,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Titel";
 
-require(TP_PAGESPATH.'rightColumn.php'); 
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 
 ?>

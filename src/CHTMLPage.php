@@ -104,26 +104,7 @@ HTMLCode;
     //
     public function prepareMenu() {
         
-        $menu = unserialize(WS_MENU);
-        $htmlMenu = "";
-        foreach($menu as $key => $value)
-            $htmlMenu .= "<a href='?p={$value}' title='{$key}'>{$key}</a> | ";
-
-/*        
-        // Om användaren är inloggad så lägg till några knappar.
-        if (isset($_SESSION['idUser'])) {
-            $htmlMenu .= <<<HTMLCode
-<a class='nav'  href='?p=new'>       Ny artikel</a><div class=separator></div>
-<a class='nav'  href='?p=admin'>     Administrera</a><div class=separator></div>
-<a class='nav'  href='?p=logout'>    Logga ut</a><div class=separator></div>
-HTMLCode;
-        } else {
-            // If user is not logged in, show link to login-page
-            $htmlMenu .= <<<HTMLCode
-<a class='nav'  href='?p=login'>                Logga in      </a>
-HTMLCode;
-        }
-*/
+        require(TP_PAGESPATH.'menu.php');
 
     return $htmlMenu;    
     }

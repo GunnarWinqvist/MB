@@ -4,15 +4,13 @@
 //
 // PMain.php
 // Called by 'main' from index.php.
-// This is the main page that everyone comes to entering the website..
+// This is the main, welcome page that everyone comes to entering the website..
 // 
-// Input: 
-// Output: 
 //
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check authority etc.
+// Check that the page is opened via index.php.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -22,16 +20,15 @@ $intFilter->FrontControllerIsVisitedOrDie();
 // Build the page
 
 $page = new CHTMLPage(); 
-$pageTitle = "Titel";
+$pageTitle = "Min bok";
 
 // Lägg in din text för huvudkolumnen här nedan i HTML-kod.
 $mainTextHTML = <<<HTMLCode
-This is the main page.
+<h2>Välkommen till min bok!</h2>
 HTMLCode;
 
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 
 ?>

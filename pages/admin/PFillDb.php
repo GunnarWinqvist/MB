@@ -124,7 +124,6 @@ fclose($fh);
 $pageTitle = "Fyll databasen";
 
 $page = new CHTMLPage(); 
-require(TP_PAGESPATH.'rightColumn.php'); 
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>

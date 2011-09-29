@@ -19,13 +19,13 @@ $intFilter->FrontControllerIsVisitedOrDie();
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kill the session.
 //
-$hitCounter = $_SESSION["hitCounter"]; // Save hitCounter before we kill the session.
+if (WS_HITCOUNTER) $hitCounter = $_SESSION["hitCounter"]; // Save hitCounter before we kill the session.
 require_once(TP_SOURCEPATH . 'FDestroySession.php');
 
 // Start a new session and reinitiate hitCounter so that a visitor isn't counted doubble.
 session_start();
 session_regenerate_id();
-$_SESSION["hitCounter"] = $hitCounter;
+if (WS_HITCOUNTER) $_SESSION["hitCounter"] = $hitCounter;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
