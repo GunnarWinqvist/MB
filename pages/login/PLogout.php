@@ -2,24 +2,25 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PLogout.php
-// Called by 'logout' from index.php.
-// This page performes a logout and send you to redirect.
+// PLogout.php (logout)
+// 
+// This page performes a logout from the session, regenerates a session and send you to redirect.
 // Input: 'redirect'
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Check that the page is reached from the front controller.
-//
+
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kill the session.
-//
-if (WS_HITCOUNTER) $hitCounter = $_SESSION["hitCounter"]; // Save hitCounter before we kill the session.
+
+// Save hitCounter before we kill the session.
+if (WS_HITCOUNTER) $hitCounter = $_SESSION["hitCounter"]; 
 require_once(TP_SOURCEPATH . 'FDestroySession.php');
 
 // Start a new session and reinitiate hitCounter so that a visitor isn't counted doubble.
@@ -30,7 +31,6 @@ if (WS_HITCOUNTER) $_SESSION["hitCounter"] = $hitCounter;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Redirect to another page if set.
-//
 
 // If in debug mode show debug and then exit before redirect.
 if ($debugEnable) {

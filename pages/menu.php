@@ -44,6 +44,7 @@ Användarnamn
 Lösenord<input type='password' name='password' size='20' maxlength='32' value='' />
 <input type='submit' title='Logga in' value='Logga in' />
 <a class='nav' href='?p=new_passw1' title='Glömt?'>Glömt?</a>
+<input type='hidden' name='redirect' value='my_page' />
 </form>
 HTMLCode;
 }

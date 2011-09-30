@@ -31,7 +31,7 @@ define('WS_FOOTER', 		"Dispangulär har gjort den här web-platsen.");
 define('WS_CHARSET', 	    'windows-1252');
 define('WS_LANGUAGE',       'se');
 
-define('WS_DEBUG',          TRUE);
+define('WS_DEBUG',          FALSE);
 define('WS_VALIDATORS',     FALSE);
 define('WS_TIMER', 		    FALSE);
 define('WS_WORK', 		    FALSE);

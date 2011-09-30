@@ -85,8 +85,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Visa barn";
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 
