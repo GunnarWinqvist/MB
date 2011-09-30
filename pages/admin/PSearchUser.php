@@ -45,8 +45,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Sök person";
 
-require(TP_PAGESPATH.'rightColumn.php'); 
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 

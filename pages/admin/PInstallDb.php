@@ -43,12 +43,12 @@ $tablePage      = DB_PREFIX . 'Page';
 $tableField     = DB_PREFIX . 'Field';
 $tableRelation  = DB_PREFIX . 'Relation';
 
-// $totalStatements must be manually changed if the number of statements are changed. Used for debugging.
-$totalStatements = 12;
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Following is the multi query that initiates the database for 'Min bok'.
+
+// $totalStatements must be manually changed if the number of statements are changed. Used for debugging.
+$totalStatements = 12;
 
 $query = <<<QUERY
 

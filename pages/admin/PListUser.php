@@ -63,7 +63,7 @@ $mainTextHTML = <<<HTMLCode
 HTMLCode;
 
 // Table
-if ($result->num_rows) {
+if ($result) {
     while($row = $result->fetch_row()) {
         if ($debugEnable) $debug .= "Query result: ".print_r($row, TRUE)."<br /> \n";
         $mainTextHTML .= <<<HTMLCode
@@ -82,6 +82,8 @@ if ($result->num_rows) {
 
 HTMLCode;
     }
+    $result->close();
+
 } else {
     $mainTextHTML .= <<<HTMLCode
 <tr>
@@ -96,7 +98,6 @@ $mainTextHTML .= <<<HTMLCode
 
 HTMLCode;
 
-$result->close();
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,8 +106,7 @@ $result->close();
 $page = new CHTMLPage(); 
 $pageTitle = "Lista användare";
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 
