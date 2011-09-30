@@ -2,16 +2,17 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PSaveChild.php
-// Called by 'save_child' from index.php.
-// The page saves information for the child id.
-// Input: 'firstName', 'famillyNamn', 'birthDate', 'id', 'redirect' as POST.
+// PSaveChild.php (save_child)
+// 
+// The page saves information from PEditChild for the child id.
+//
+// Input: 'firstName', 'familyNamn', 'birthDate', 'id', 'redirect' as POST.
 // Output:  
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -19,24 +20,26 @@ $intFilter->UserIsSignedInOrRedirectToSignIn();
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Prepare the database and clean input and query the database.
-//
+// Prepare the database and clean input.
 
 $dbAccess           = new CdbAccess();
 $tableChild         = DB_PREFIX . 'Child';
 
 $idChild             = isset($_POST['id'])          ? $_POST['id']          : NULL;
 $firstNameChild      = isset($_POST['firstName'])   ? $_POST['firstName']   : NULL;
-$famillyNameChild    = isset($_POST['famillyName']) ? $_POST['famillyName'] : NULL;
+$familyNameChild    = isset($_POST['familyNamn']) ? $_POST['familyNamn'] : NULL;
 $birthDateChild      = isset($_POST['birthDate'])   ? $_POST['birthDate']   : NULL;
 $redirect            = isset($_POST['redirect'])    ? $_POST['redirect']    : NULL;
 
 $idChild 		     = $dbAccess->WashParameter($idChild);
 $firstNameChild 	 = $dbAccess->WashParameter(strip_tags($firstNameChild));
-$famillyNameChild    = $dbAccess->WashParameter(strip_tags($famillyNameChild));
+$familyNameChild     = $dbAccess->WashParameter(strip_tags($familyNameChild));
 $birthDateChild 	 = $dbAccess->WashParameter(strip_tags($birthDateChild));
 $idUser              = $_SESSION['idUser'];
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Check that it is the user's child and query the database.
 
 if ($idChild) { // If the child exists check that it's the users child and update the database.
     $query = "SELECT child_idUser FROM {$tableChild} WHERE idChild = {$idChild};";
@@ -51,14 +54,14 @@ if ($idChild) { // If the child exists check that it's the users child and updat
     $query = <<<QUERY
 UPDATE {$tableChild} SET 
     firstNameChild   = '{$firstNameChild}',
-    famillyNameChild = '{$famillyNameChild}',
+    familyNameChild  = '{$familyNameChild}',
     birthDateChild     = '{$birthDateChild}'
     WHERE idChild = '{$idChild}';
 QUERY;
 } else { // Else enter a new child.
     $query = <<<QUERY
-INSERT INTO {$tableChild} (firstNameChild, famillyNameChild, birthDateChild, child_idUser)
-    VALUES ('{$firstNameChild}', '{$famillyNameChild}', '{$birthDateChild}', '{$idUser}');
+INSERT INTO {$tableChild} (firstNameChild, familyNameChild, birthDateChild, child_idUser)
+    VALUES ('{$firstNameChild}', '{$familyNameChild}', '{$birthDateChild}', '{$idUser}');
 QUERY;
 }
 
@@ -71,7 +74,6 @@ if ($debugEnable) $debug .= "idChild: " . $idChild . "<br /> \n";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Redirect to another page
-//
 
 // If in debug mode show info and exit.
 if ($debugEnable) {

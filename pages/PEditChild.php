@@ -2,18 +2,19 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PEditChild.php
-// Called by 'edit_child' from index.php.
+// PEditChild.php (edit_child)
+// 
 // The page generates a form for editing details of a child. If no id is provided a new child is 
 // generated.
 // From this page you are sent to PSaveChild and then to PMyPage.
+//
 // Input: 'id'
-// Output: 'firstName', 'famillyNamn', 'birthDate', 'id', 'redirect' as POST.
+// Output: 'firstName', 'familyNamn', 'birthDate', 'id', 'redirect' as POST.
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -23,11 +24,12 @@ $intFilter->UserIsSignedInOrRedirectToSignIn();
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Prepare the database and clean input.
 
-$dbAccess           = new CdbAccess();
-$tableChild         = DB_PREFIX . 'Child';
+$dbAccess   = new CdbAccess();
+$tableChild = DB_PREFIX . 'Child';
 
-$idChild = isset($_GET['id']) ? $_GET['id'] : NULL;
-$idChild = $dbAccess->WashParameter($idChild);
+$idChild    = isset($_GET['id']) ? $_GET['id'] : NULL;
+$idChild    = $dbAccess->WashParameter($idChild);
+
 if ($debugEnable) $debug .= "Input: id=" . $idChild . "<br /> \n";
 
 
@@ -54,7 +56,7 @@ $mainTextHTML = <<<HTMLCode
 <tr><td>Förnamn</td>
 <td><input type='text' name='firstName' size='40' maxlength='50' value='{$aChild[1]}' /></td></tr>
 <tr><td>Efternamn</td>
-<td><input type='text' name='famillyName' size='40' maxlength='50' value='{$aChild[2]}' /></td></tr>
+<td><input type='text' name='familyNamn' size='40' maxlength='50' value='{$aChild[2]}' /></td></tr>
 <tr><td>Födelsedatum</td>
 <td><input type='text' name='birthDate' size='40' maxlength='50' value='{$aChild[3]}' /></td></tr>
 </table>
@@ -81,8 +83,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Editera barn";
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 
