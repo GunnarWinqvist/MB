@@ -37,7 +37,7 @@ $tableRelation  = DB_PREFIX . 'Relation';
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Open the file.
 
-$filePath = TP_DOCUMENTSPATH . $fileName;
+$filePath = TP_ROOTPATH . $fileName;
 $fh = fopen($filePath, "rt");
 if ($debugEnable) $debug .= "filePath = ".$filePath." fh=".$fh."<br /> \n";
 

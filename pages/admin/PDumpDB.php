@@ -38,7 +38,7 @@ $tableRelation  = DB_PREFIX . 'Relation';
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Open the file.
 
-$filePath = TP_DOCUMENTSPATH . $fileName;
+$filePath = TP_ROOTPATH . $fileName;
 $fh = fopen($filePath, "w");
 
 
@@ -88,7 +88,7 @@ fclose($fh);
 // Build the page.
 
 $pageTitle = "Dumpa databasen";
-$documents = WS_SITELINK . "documents/" . $fileName;
+$documents = WS_SITELINK . $fileName;
 $mainTextHTML = <<<HTMLCode
 <p>Gjorde en lyckad dump av databasen till filen: {$fileName}.
 <p>Vill du ladda ner filen?</p>
