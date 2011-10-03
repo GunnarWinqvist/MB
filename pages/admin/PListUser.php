@@ -2,17 +2,18 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PListUser.php
-// Called by list_user from index.php.
+// PListUser.php (list_user)
+// 
 // The page lists alla users that correspond with the search criteria and adds buttons for
 // register actions.
+//
 // Input: 'firstName', 'familyName', 'account'.
 // Output:  'id'  
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
@@ -22,26 +23,31 @@ $intFilter->UserIsAuthorisedOrDie('adm');
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Take care of input to the page.
-//
 
-$accountUser    = isset($_POST['account'])    ? $_POST['account']     : NULL;
-$firstNameUser    = isset($_POST['firstName'])    ? $_POST['firstName']     : NULL;
-$familyNameUser  = isset($_POST['familyName'])  ? $_POST['familyName']   : NULL;
+$accountUser    = isset($_POST['account'])    ? $_POST['account']    : NULL;
+$firstNameUser  = isset($_POST['firstName'])  ? $_POST['firstName']  : NULL;
+$familyNameUser = isset($_POST['familyName']) ? $_POST['familyName'] : NULL;
 
 if ($debugEnable) $debug .= $accountUser . $firstNameUser . $familyNameUser . "<br /> \n";
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Query the database and clean input.
+// Prepare the database and clean input.
 
 $dbAccess           = new CdbAccess();
 $tableUser          = DB_PREFIX . 'User';
+
 $accountUser 		= $dbAccess->WashParameter($accountUser);
 $firstNameUser 		= $dbAccess->WashParameter($firstNameUser);
-$familyNameUser    = $dbAccess->WashParameter($familyNameUser);
+$familyNameUser     = $dbAccess->WashParameter($familyNameUser);
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Query the database.
 
 $query = "SELECT * FROM {$tableUser} ";
 if      ($accountUser)      $query .= "WHERE accountUser     LIKE '%{$accountUser}%'";
-elseif  ($familyNameUser)  $query .= "WHERE familyNameUser LIKE '%{$familyNameUser}%'";
+elseif  ($familyNameUser)   $query .= "WHERE familyNameUser  LIKE '%{$familyNameUser}%'";
 elseif  ($firstNameUser)    $query .= "WHERE firstNameUser   LIKE '%{$firstNameUser}%'";
 $query .= " ORDER BY familyNameUser;";
 

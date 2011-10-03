@@ -2,16 +2,17 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PSearchUser.php
-// Called by 'search' from index.php.
+// PSearchUser.php (search)
+// 
 // On this page you can search for a user on first name, family name or account.
+//
 // Input:  
 // Output:  'firstName', 'familyName', 'account'. 
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();

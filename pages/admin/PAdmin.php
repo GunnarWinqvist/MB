@@ -2,8 +2,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PAdmin.php
-// Called by 'admin' from index.php.
+// PAdmin.php (admin)
+// 
 // Administration page with tools for the administrator.
 // 
 // Input: 
@@ -12,7 +12,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
