@@ -2,22 +2,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PEditUser.php
-// Called by 'edit_user' from index.php.
+// PEditUser.php (edit_user)
+// 
 // The page generates a form for editing details of an user. 
 // From this page you are sent to PSaveUser and after that redirected to PShowUser.
+//
 // Input: 'id'
 // Output: 'firstName', 'familyNamn', 'eMail1', 'eMail2', 'id', 'redirect' as POST.
 // 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
 $intFilter->UserIsSignedInOrRedirectToSignIn();
-$intFilter->UserIsAuthorisedOrDie('adm');
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +29,16 @@ $tableUser        = DB_PREFIX . 'User';
 $idUser = isset($_GET['id']) ? $_GET['id'] : NULL;
 $idUser = $dbAccess->WashParameter($idUser);
 if ($debugEnable) $debug .= "Input: id=" . $idUser . "<br /> \n";
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Check if session user is NOT owner of page and NOT adm. If so give message and exit.
+
+if (($_SESSION['idUser'] != $idUser) AND ($_SESSION['authorityUser'] != 'adm')) {
+    $_SESSION['errorMessage']      = "Du har inte behörighet att titta på den här användaren!";
+    header('Location: ' . WS_SITELINK . "?p=main");
+    exit;
+    }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +73,7 @@ $mainTextHTML = <<<HTMLCode
 <tr><td>e-postadress 1</td>
 <td><input type='text' name='eMail1' size='40' maxlength='50' value='{$arrayUser[6]}' /></td></tr>
 <tr><td>e-postadress 2</td>
-<td><input type='text' name='eMail2' size='40' maxlength='20' value='{$arrayUser[7]}' /></td></tr>
+<td><input type='text' name='eMail2' size='40' maxlength='50' value='{$arrayUser[7]}' /></td></tr>
 </table>
 
 HTMLCode;
@@ -88,8 +98,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Editera användare";
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 ?>
 

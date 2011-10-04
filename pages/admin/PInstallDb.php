@@ -101,7 +101,7 @@ CREATE TABLE {$tableChild} (
 CREATE TABLE {$tableBook} (
   idBook INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   nameBook CHAR(50),
-  firstPageBook INT,
+  firstPageBook INT DEFAULT '0',
   book_idChild INT,
   FOREIGN KEY (book_idChild) REFERENCES {$tableChild}(idChild)
 );
@@ -116,8 +116,8 @@ CREATE TABLE {$tableBook} (
 CREATE TABLE {$tablePage} (
   idPage INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   headerPage CHAR(50),
-  stylePage INT,
-  nextPage INT,
+  stylePage INT DEFAULT '0',
+  nextPage INT DEFAULT '0',
   page_idBook INT,
   FOREIGN KEY (page_idBook) REFERENCES {$tableBook}(idBook)
 );

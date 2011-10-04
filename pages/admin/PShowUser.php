@@ -2,8 +2,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PShowUser.php
-// Called by 'show_user' from index.php.
+// PShowUser.php (show_user)
+// 
 // The page shows everything about a user from the register except the password.
 // Input: id
 // Output: 
@@ -11,12 +11,11 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Check that the page is reached from the front controller and authority etc.
+// Check that the page is opened via index.php and that the user has the right authority.
 
 $intFilter = new CAccessControl();
 $intFilter->FrontControllerIsVisitedOrDie();
 $intFilter->UserIsSignedInOrRedirectToSignIn();
-$intFilter->UserIsAuthorisedOrDie('adm');
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,18 +26,49 @@ if ($debugEnable) $debug .= "Input: id=" . $idUser . "<br /> \n";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+// Check if session user is NOT owner of page and NOT adm. If so give message and exit.
+
+if (($_SESSION['idUser'] != $idUser) AND ($_SESSION['authorityUser'] != 'adm')) {
+    $_SESSION['errorMessage']      = "Du har inte behörighet att titta på den här användaren!";
+    header('Location: ' . WS_SITELINK . "?p=main");
+    exit;
+    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // Prepare the database and clean input.
 
 $dbAccess           = new CdbAccess();
 $tableUser          = DB_PREFIX . 'User';
+$tableChild         = DB_PREFIX . 'Child';
+$tableBook          = DB_PREFIX . 'Book';
+$tablePage          = DB_PREFIX . 'Page';
+$tableRelation      = DB_PREFIX . 'Relation';
+
 $idUser 		    = $dbAccess->WashParameter($idUser);
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Query the database for all information regarding idUser.
 
-$totalStatements = 1;
+$totalStatements = 5;
 $query = <<<QUERY
+-- Basic information
 SELECT * FROM {$tableUser} WHERE idUser = {$idUser};
+
+-- Number of children in the system.
+SELECT COUNT(*) FROM {$tableChild} WHERE child_idUser = {$idUser};
+
+-- Number of books
+SELECT COUNT(*) FROM ({$tableChild} JOIN {$tableBook} ON book_idChild = idChild) WHERE child_idUser = {$idUser};
+
+-- Number of pages
+SELECT COUNT(*) FROM (({$tableChild} JOIN {$tableBook} ON book_idChild = idChild) 
+    JOIN {$tablePage} ON page_idBook = idBook) WHERE child_idUser = {$idUser};
+
+-- Number of guests
+SELECT COUNT(*) FROM {$tableRelation} WHERE relation_idUser = {$idUser};
+
 QUERY;
 
 $statements = $dbAccess->MultiQuery($query, $arrayResult); 
@@ -64,6 +94,23 @@ $mainTextHTML = <<<HTMLCode
 HTMLCode;
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// List engagement.
+
+$arrayChilds = $arrayResult[1]->fetch_row(); $arrayResult[1]->close();
+$arrayBooks  = $arrayResult[2]->fetch_row(); $arrayResult[2]->close();
+$arrayPages  = $arrayResult[3]->fetch_row(); $arrayResult[3]->close();
+$arrayGuests = $arrayResult[4]->fetch_row(); $arrayResult[4]->close();
+
+$mainTextHTML .= <<<HTMLCode
+<h3>Aktiviteter</h3>
+<table>
+<tr><td>Antal barn  </td><td>{$arrayChilds[0]}</td></tr>
+<tr><td>Antal böcker</td><td>{$arrayBooks[0]} </td></tr>
+<tr><td>Antal sidor </td><td>{$arrayPages[0]} </td></tr>
+<tr><td>Antal gäster</td><td>{$arrayGuests[0]}</td></tr>
+</table>
+HTMLCode;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Lägg till knappar för editering och ändra lösenord. Olika för admin.
@@ -71,7 +118,7 @@ if ($_SESSION['authorityUser'] == "adm") {
     $mainTextHTML .= <<<HTMLCode
 <a title='Editera' href='?p=edit_user&amp;id={$idUser}' tabindex='1'><img src='../images/b_edit.gif' alt='Editera' /></a>
 <a title='Ändra lösenord' href='?p=edit_account&amp;id={$idUser}'><img src='../images/b_password.gif' alt='Ändra lösenord' /></a>
-<a title='Radera' href='?p=del_account&amp;id={$idUser}' onclick="return confirm('Vill du radera användaren ur databasen?');">
+<a title='Radera' href='?p=del_user&amp;id={$idUser}' onclick="return confirm('Vill du radera användaren ur databasen?');">
             <img src='../images/b_delete.gif' alt='Radera' /></a>
 HTMLCode;
 
@@ -89,8 +136,7 @@ HTMLCode;
 $page = new CHTMLPage(); 
 $pageTitle = "Visa person";
 
-require(TP_PAGESPATH.'rightColumn.php'); // Genererar en högerkolumn i $rightColumnHTML
-$page->printPage($pageTitle, $mainTextHTML, "", $rightColumnHTML);
+$page->printPage($pageTitle, $mainTextHTML);
 
 
 ?>

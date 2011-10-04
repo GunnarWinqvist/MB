@@ -17,6 +17,7 @@ HTMLCode;
 if (isset($_SESSION['idUser'])) {
     $htmlMenu .= <<<HTMLCode
 <a class='nav' href='?p=my_page' title='Min sida'>Min sida</a> | 
+<a class='nav' href='?p=show_user&amp;id={$_SESSION['idUser']}' title='Mitt konto'>Mitt konto</a> | 
 HTMLCode;
 
 // Buttons for admin.

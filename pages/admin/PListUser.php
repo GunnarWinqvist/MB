@@ -82,7 +82,7 @@ if ($result) {
     <td><a title='Visa' href='?p=show_user&amp;id={$row[0]}' ><img src='../images/page.png' alt='Visa' /></a></td>
     <td><a title='Editera' href='?p=edit_user&amp;id={$row[0]}'><img src='../images/page_edit.png' alt='Ändra' /></a></td>
     <td><a title='Konto' href='?p=edit_account&amp;id={$row[0]}'><img src='../images/page_key.png' alt='Konto' /></a></td>
-    <td><a title='Radera' href='?p=del_account&amp;id={$row[0]}' onclick="return confirm('Vill du radera användaren ur databasen?');">
+    <td><a title='Radera' href='?p=del_user&amp;id={$row[0]}' onclick="return confirm('Vill du radera användaren ur databasen?');">
             <img src='../images/page_delete.png' alt='Radera' /></a></td>
 </tr>
 
