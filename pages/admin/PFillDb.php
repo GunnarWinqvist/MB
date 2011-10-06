@@ -94,8 +94,8 @@ Query;
             break;
             case 'tableField':
                 $query = <<<Query
-INSERT INTO {$tableField} (idField, typeField, parameter1Field, parameter2Field, parameter3Field, 
-        parameter4Field, parameter5Field, field_idPage)
+INSERT INTO {$tableField} (idField, typeField, textField, parameter1Field, parameter2Field, parameter3Field, 
+        parameter4Field, field_idPage)
 VALUES ('{$row[0]}', '{$row[1]}', '{$row[2]}', '{$row[3]}', '{$row[4]}', '{$row[5]}', '{$row[6]}', '{$row[7]}');
 Query;
             break;

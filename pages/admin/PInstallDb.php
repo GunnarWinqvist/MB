@@ -131,11 +131,11 @@ CREATE TABLE {$tablePage} (
 CREATE TABLE {$tableField} (
   idField INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   typeField INT,
-  parameter1Field INT,
-  parameter2Field INT,
-  parameter3Field INT,
-  parameter4Field INT,
-  parameter5Field INT,
+  textField TEXT,
+  parameter1Field CHAR(50),
+  parameter2Field CHAR(50),
+  parameter3Field CHAR(50),
+  parameter4Field CHAR(50),
   field_idPage INT,
   FOREIGN KEY (field_idPage) REFERENCES {$tablePage}(idPage)
 );

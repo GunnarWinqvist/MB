@@ -27,6 +27,7 @@ $dbAccess             = new CdbAccess();
 $tableBook            = DB_PREFIX . 'Book';
 $tableChild           = DB_PREFIX . 'Child';
 $tablePage            = DB_PREFIX . 'Page';
+$tableField           = DB_PREFIX . 'Field';
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,14 +90,21 @@ QUERY;
     // Then we must add a first page of the new book.
     $query = <<<QUERY
 INSERT INTO {$tablePage} (headerPage, stylePage, page_idBook)
-    VALUES ('Ny sida', '1', '{$idBook}');
+    VALUES ('{$nameBook}', '1', '{$idBook}');
 QUERY;
     $dbAccess->SingleQuery($query);
     
     // Check what id that page got.
     $idFirstPage = $dbAccess->LastId();
 
-    // At last we the book with it's first page.
+    // Add a field to the new page.
+    $query = <<<QUERY
+INSERT INTO {$tableField} (typeField, parameter1Field, parameter2Field, field_idPage)
+    VALUES ('2', 'images/defaultImage.gif', 'Neutral bild', {$idFirstPage});
+QUERY;
+    $dbAccess->SingleQuery($query);
+
+    // At last we update the book with it's first page.
     $query = <<<QUERY
 UPDATE {$tableBook} 
     SET firstPageBook = '{$idFirstPage}'

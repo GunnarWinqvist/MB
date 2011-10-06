@@ -18,11 +18,12 @@ class CHTMLPage {
     //
     public function __construct($style = 0) {
         if ($style) {
-            $this->skeleton     = $style;
-            $this->stylesheet   = "style/stylesheet" . $style . ".css";
+            $this->style      = $style;
+            $this->stylesheet = "style/stylesheet" . $style . ".css";
             
         } else {
-            $this->stylesheet       = WS_STYLESHEET;
+            $this->style      = 0;
+            $this->stylesheet = WS_STYLESHEET;
         }
     }
     
@@ -44,9 +45,11 @@ class CHTMLPage {
         $charset	= WS_CHARSET;
         $siteTitle  = WS_TITLE;
         $favicon 	= WS_FAVICON;
+        $style      = $this->style;
         $stylesheet = $this->stylesheet;
         $top        = $this->prepareTop();
         $menu       = $this->prepareMenu();
+        //$bookMenu   = $this->prepareBookMenu();
         $body       = $this->preparePageBody($mainTextHTML, $leftColumnHTML, $rightColumnHTML);
         $footer     = WS_FOOTER;
         $timer      = $this->prepareTimer();
@@ -65,6 +68,11 @@ class CHTMLPage {
         <!-- HTML5 support for IE -->
         <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->        
     </head>
+HTMLCode;
+
+        switch($style) {
+            case 0:
+                echo <<<HTMLCode
     <body>
         <div class='page'>
             <div class='head'>
@@ -79,10 +87,23 @@ class CHTMLPage {
             </div><!--End of div class footer-->
         </div><!--End of div class page-->
     </body>
-{$debugInfo}
-</html>
 HTMLCode;
+                break;
+                
+            case 1:
+                echo <<<HTMLCode
+    <body>
+        <div class='page'>
+            <h1>{$pageTitle}</h1>
+            {$body}
+        </div><!--End of div class page-->
+    </body>
+HTMLCode;
+                break;
+                
         }
+        echo $debugInfo . "</html>";
+    }
 
 
         
@@ -105,6 +126,17 @@ HTMLCode;
     public function prepareMenu() {
         
         require(TP_PAGESPATH.'menu.php');
+
+    return $htmlMenu;    
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Genererar menyn som är gemensam för samtliga sidor. 
+    //
+    public function prepareBookMenu() {
+        
+        require(TP_PAGESPATH.'bookMenu.php');
 
     return $htmlMenu;    
     }
