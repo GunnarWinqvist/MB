@@ -88,8 +88,8 @@ Query;
             break;
             case 'tablePage':
                 $query = <<<Query
-INSERT INTO {$tablePage} (idPage, headerPage, stylePage, nextPage, page_idBook)
-VALUES ('{$row[0]}', '{$row[1]}', '{$row[2]}', '{$row[3]}', '{$row[4]}');
+INSERT INTO {$tablePage} (idPage, headerPage, stylePage, frameworkPage, nextPage, page_idBook)
+VALUES ('{$row[0]}', '{$row[1]}', '{$row[2]}', '{$row[3]}', '{$row[4]}', '{$row[5]}');
 Query;
             break;
             case 'tableField':

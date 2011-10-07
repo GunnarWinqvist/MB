@@ -117,6 +117,7 @@ CREATE TABLE {$tablePage} (
   idPage INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   headerPage CHAR(50),
   stylePage INT DEFAULT '0',
+  frameworkPage INT DEFAULT '0',
   nextPage INT DEFAULT '0',
   page_idBook INT,
   FOREIGN KEY (page_idBook) REFERENCES {$tableBook}(idBook)
@@ -130,7 +131,7 @@ CREATE TABLE {$tablePage} (
 
 CREATE TABLE {$tableField} (
   idField INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  typeField INT,
+  typeField INT DEFAULT '0',
   textField TEXT,
   parameter1Field CHAR(50),
   parameter2Field CHAR(50),

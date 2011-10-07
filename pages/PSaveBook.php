@@ -89,8 +89,8 @@ QUERY;
  
     // Then we must add a first page of the new book.
     $query = <<<QUERY
-INSERT INTO {$tablePage} (headerPage, stylePage, page_idBook)
-    VALUES ('{$nameBook}', '1', '{$idBook}');
+INSERT INTO {$tablePage} (headerPage, stylePage, frameworkPage, page_idBook)
+    VALUES ('{$nameBook}', '1', '1', '{$idBook}');
 QUERY;
     $dbAccess->SingleQuery($query);
     
@@ -99,8 +99,8 @@ QUERY;
 
     // Add a field to the new page.
     $query = <<<QUERY
-INSERT INTO {$tableField} (typeField, parameter1Field, parameter2Field, field_idPage)
-    VALUES ('2', 'images/defaultImage.gif', 'Neutral bild', {$idFirstPage});
+INSERT INTO {$tableField} (typeField, parameter1Field, parameter2Field, parameter4Field, field_idPage)
+    VALUES ('2', 'images/defaultImage.gif', 'Neutral bild', '1', {$idFirstPage});
 QUERY;
     $dbAccess->SingleQuery($query);
 

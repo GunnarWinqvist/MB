@@ -47,10 +47,10 @@ if ($firstPage)
 if ($previousPage) 
     $htmlBookMenu .= "<a class='nav' href='?p=show_page&amp;idPage={$previousPage}' title='Förra sidan'>Förra sidan</a> | \n";
 $htmlBookMenu     .= "<a class='nav' href='?p=edit_page&amp;idPage={$idPage}' title='Redigera den här sidan'>Redigera den här sidan</a> | \n";
-$htmlBookMenu     .= "<a class='nav' href='?p=main' title='Skapa en sida efter den här'>Skapa en sida efter den här</a> | \n";
+$htmlBookMenu     .= "<a class='nav' href='?p=create_page&amp;idPage={$idPage}' title='Skapa en sida efter den här'>Skapa en sida efter den här</a> | \n";
 $htmlBookMenu     .= "<a class='nav' href='?p=my_page' title='Gå till huvudmenyn'>Gå till huvudmenyn</a> | \n";
 if ($nextPage) 
-    $htmlBookMenu .= "<a class='nav' href='?p=show_page&amp;idPage={$nextPage}' title='Nästa sidan'>Nästa sidan</a> | \n";
+    $htmlBookMenu .= "<a class='nav' href='?p=show_page&amp;idPage={$nextPage}' title='Nästa sida'>Nästa sida</a> | \n";
 if ($lastPage) 
     $htmlBookMenu .= "<a class='nav' href='?p=show_page&amp;idPage={$lastPage}' title='Sista sidan'>Sista sidan</a> | \n";
 

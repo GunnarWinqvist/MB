@@ -51,23 +51,25 @@ if (!$dbAccess->SingleQuery($query) AND ($_SESSION['authorityUser'] != 'adm')) {
 }
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Get info about this page.
 
 $query      = "SELECT * FROM {$tablePage} WHERE idPage = {$idPage};";
 $result     = $dbAccess->SingleQuery($query);
 $row        = $result->fetch_object();
-if ($debugEnable) $debug .= "idPage=".$idPage." header=".$row->headerPage." style=".$row->stylePage." nextPage=".$row->nextPage."<br /> \n";
+if ($debugEnable) $debug .= "idPage=".$idPage." header=".$row->headerPage." style=".$row->stylePage
+    ." framework=".$row->frameworkPage." nextPage=".$row->nextPage."<br /> \n";
 $style      = $row->stylePage;
+$framework  = $row->frameworkPage;
 $header     = $row->headerPage;
 $result->close();
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Fetch data about the page.
+// Get data about all fields of the page.
 
 $query      = "SELECT * FROM {$tableField} WHERE field_idPage = {$idPage};";
-$mainTextHTML = "";
+$column = array("","","","");
 
 if ($result = $dbAccess->SingleQuery($query)) {
     while ($row = $result->fetch_object()) {
@@ -75,7 +77,7 @@ if ($result = $dbAccess->SingleQuery($query)) {
         switch($row->typeField) {
         
             case 1: // Text field
-                $mainTextHTML .= <<<HTMLCode
+                $column[$row->parameter4Field] .= <<<HTMLCode
 <div class='textField'>
     {$row->textField}
 </div>
@@ -83,7 +85,7 @@ HTMLCode;
                 break;
             
             case 2: // Image field
-                $mainTextHTML .= <<<HTMLCode
+                $column[$row->parameter4Field] .= <<<HTMLCode
 <div class='imageField'>
     <img src='{$row->parameter1Field}' alt='{$row->parameter2Field}' />
 </div>
@@ -97,25 +99,24 @@ HTMLCode;
     }
     $result->close();
 } else {
-    $mainTextHTML .= <<<HTMLCode
+    $column[1] .= <<<HTMLCode
 <p>Det finns inget inlagt på sidan än.</p>
 HTMLCode;
 }
 
-if ($debugEnable) $debug .= "mainTextHTML=".$mainTextHTML."<br /> \n";
+if ($debugEnable) $debug .= print_r($column, TRUE)."<br /> \n";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Add the page menu.
 
 require(TP_PAGESPATH.'bookMenu.php');
-$mainTextHTML .= $htmlBookMenu;
+$column[1] .= $htmlBookMenu;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Generate the page.
 
 $page = new CHTMLPage($style); 
-
-$page->printPage($header, $mainTextHTML);
+$page->printPage($header, $column[1], $column[2], $column[3]);
 
 
 ?>
